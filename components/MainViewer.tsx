@@ -1,0 +1,62 @@
+
+import React, { Suspense } from 'react';
+import { Canvas } from '@react-three/fiber';
+import { OrbitControls, PerspectiveCamera, GizmoHelper, GizmoViewport, Environment } from '@react-three/drei';
+import { Topic } from '../types';
+import TetrahedronVisualizer from './visualizers/TetrahedronVisualizer';
+import PyramidVisualizer from './visualizers/PyramidVisualizer';
+import DihedralAngleVisualizer from './visualizers/DihedralAngleVisualizer';
+import ThreePerpendicularsVisualizer from './visualizers/ThreePerpendicularsVisualizer';
+import CoordinateSystemVisualizer from './visualizers/CoordinateSystemVisualizer';
+import PlaneIntersectionsVisualizer from './visualizers/PlaneIntersectionsVisualizer';
+
+interface MainViewerProps {
+  topic: Topic;
+}
+
+const Scene: React.FC<{ topic: Topic }> = ({ topic }) => {
+  switch (topic) {
+    case Topic.Tetrahedron: return <TetrahedronVisualizer />;
+    case Topic.Pyramid: return <PyramidVisualizer />;
+    case Topic.DihedralAngle: return <DihedralAngleVisualizer />;
+    case Topic.ThreePerpendiculars: return <ThreePerpendicularsVisualizer />;
+    case Topic.CoordinateSystem: return <CoordinateSystemVisualizer />;
+    case Topic.PlaneIntersections: return <PlaneIntersectionsVisualizer />;
+    default: return null;
+  }
+};
+
+const MainViewer: React.FC<MainViewerProps> = ({ topic }) => {
+  return (
+    <div className="w-full h-full relative cursor-move">
+      <Canvas shadows dpr={[1, 2]} className="bg-slate-50">
+        <PerspectiveCamera makeDefault position={[5, 5, 5]} fov={50} />
+        <OrbitControls makeDefault minDistance={2} maxDistance={20} />
+        
+        <ambientLight intensity={1.2} />
+        <directionalLight position={[10, 10, 10]} intensity={1} castShadow />
+        <pointLight position={[-10, 5, -10]} intensity={0.5} />
+
+        <Suspense fallback={null}>
+          <Scene topic={topic} />
+        </Suspense>
+
+        <GizmoHelper alignment="bottom-right" margin={[80, 80]}>
+          <GizmoViewport axisColors={['#ef4444', '#22c55e', '#3b82f6']} labelColor="#1e293b" />
+        </GizmoHelper>
+
+        <Environment preset="city" />
+        {/* Darkened the grid lines: primary color 0x94a3b8 (Slate 400), secondary 0xd1d5db (Slate 300) */}
+        <gridHelper args={[20, 20, 0x94a3b8, 0xd1d5db]} position={[0, -0.01, 0]} />
+      </Canvas>
+
+      <div className="absolute top-4 right-4 pointer-events-none text-right">
+        <div className="bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-full text-xs text-slate-700 border border-slate-300 uppercase tracking-widest shadow-md font-bold">
+          3D Interactive Model
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default MainViewer;
