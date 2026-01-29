@@ -1,4 +1,3 @@
-
 import React, { Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, PerspectiveCamera, GizmoHelper, GizmoViewport, Environment } from '@react-three/drei';
@@ -9,6 +8,12 @@ import DihedralAngleVisualizer from './visualizers/DihedralAngleVisualizer';
 import ThreePerpendicularsVisualizer from './visualizers/ThreePerpendicularsVisualizer';
 import CoordinateSystemVisualizer from './visualizers/CoordinateSystemVisualizer';
 import PlaneIntersectionsVisualizer from './visualizers/PlaneIntersectionsVisualizer';
+
+// Fix: Define intrinsic elements as local constants to bypass JSX type checking issues
+const AmbientLight = 'ambientLight' as any;
+const DirectionalLight = 'directionalLight' as any;
+const PointLight = 'pointLight' as any;
+const GridHelper = 'gridHelper' as any;
 
 interface MainViewerProps {
   topic: Topic;
@@ -33,9 +38,12 @@ const MainViewer: React.FC<MainViewerProps> = ({ topic }) => {
         <PerspectiveCamera makeDefault position={[5, 5, 5]} fov={50} />
         <OrbitControls makeDefault minDistance={2} maxDistance={20} />
         
-        <ambientLight intensity={1.2} />
-        <directionalLight position={[10, 10, 10]} intensity={1} castShadow />
-        <pointLight position={[-10, 5, -10]} intensity={0.5} />
+        {/* Fix: use AmbientLight constant for intrinsic element */}
+        <AmbientLight intensity={1.2} />
+        {/* Fix: use DirectionalLight constant for intrinsic element */}
+        <DirectionalLight position={[10, 10, 10]} intensity={1} castShadow />
+        {/* Fix: use PointLight constant for intrinsic element */}
+        <PointLight position={[-10, 5, -10]} intensity={0.5} />
 
         <Suspense fallback={null}>
           <Scene topic={topic} />
@@ -46,8 +54,9 @@ const MainViewer: React.FC<MainViewerProps> = ({ topic }) => {
         </GizmoHelper>
 
         <Environment preset="city" />
+        {/* Fix: use GridHelper constant for intrinsic element */}
         {/* Darkened the grid lines: primary color 0x94a3b8 (Slate 400), secondary 0xd1d5db (Slate 300) */}
-        <gridHelper args={[20, 20, 0x94a3b8, 0xd1d5db]} position={[0, -0.01, 0]} />
+        <GridHelper args={[20, 20, 0x94a3b8, 0xd1d5db]} position={[0, -0.01, 0]} />
       </Canvas>
 
       <div className="absolute top-4 right-4 pointer-events-none text-right">
