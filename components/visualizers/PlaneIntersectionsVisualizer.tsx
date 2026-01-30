@@ -89,7 +89,7 @@ const PlaneIntersectionsVisualizer: React.FC = () => {
       <Group position={[4.5, 5, 4.5]}>
         <Html center>
           <div className="bg-white/95 backdrop-blur-md p-8 rounded-[2rem] border border-slate-200 shadow-2xl min-w-[320px]">
-            <h4 className="text-xs font-black text-slate-400 mb-6 text-center uppercase tracking-[0.2em]">截距式平面方程式</h4>
+            <h4 className="text-xs font-black text-slate-400 mb-6 text-center uppercase tracking-[0.2em]">平面截距式</h4>
             <div className="flex items-center justify-center text-3xl font-serif text-slate-800">
               <Fraction numerator={<span className="text-blue-600 italic">x</span>} denominator={x_int} />
               <span className="mx-3 text-slate-300 font-light">+</span>

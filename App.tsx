@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Topic, TopicInfo } from './types';
 import Sidebar from './components/Sidebar';
@@ -12,7 +11,7 @@ const TOPICS: TopicInfo[] = [
   { id: Topic.DihedralAngle, title: '兩面角', description: '兩個平面相交形成的夾角' },
   { id: Topic.ThreePerpendiculars, title: '三垂線定理', description: '空間中的垂直關係判定' },
   { id: Topic.CoordinateSystem, title: '空間坐標系', description: '基礎三軸與點投影' },
-  { id: Topic.PlaneIntersections, title: '平面與軸截距', description: '空間平面與三軸相交點' },
+  { id: Topic.PlaneIntersections, title: '平面截距式', description: '空間平面與三軸相交點' },
 ];
 
 const App: React.FC = () => {
