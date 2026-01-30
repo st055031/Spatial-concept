@@ -38,11 +38,8 @@ const MainViewer: React.FC<MainViewerProps> = ({ topic }) => {
         <PerspectiveCamera makeDefault position={[5, 5, 5]} fov={50} />
         <OrbitControls makeDefault minDistance={2} maxDistance={20} />
         
-        {/* Fix: use AmbientLight constant for intrinsic element */}
         <AmbientLight intensity={1.2} />
-        {/* Fix: use DirectionalLight constant for intrinsic element */}
         <DirectionalLight position={[10, 10, 10]} intensity={1} castShadow />
-        {/* Fix: use PointLight constant for intrinsic element */}
         <PointLight position={[-10, 5, -10]} intensity={0.5} />
 
         <Suspense fallback={null}>
@@ -50,12 +47,15 @@ const MainViewer: React.FC<MainViewerProps> = ({ topic }) => {
         </Suspense>
 
         <GizmoHelper alignment="bottom-right" margin={[80, 80]}>
-          <GizmoViewport axisColors={['#ef4444', '#22c55e', '#3b82f6']} labelColor="#1e293b" />
+          {/* Labels order corresponds to physical X(Red), Y(Green), Z(Blue) */}
+          <GizmoViewport 
+            axisColors={['#ef4444', '#22c55e', '#3b82f6']} 
+            labelColor="#1e293b" 
+            labels={['Y', 'Z', 'X']}
+          />
         </GizmoHelper>
 
         <Environment preset="city" />
-        {/* Fix: use GridHelper constant for intrinsic element */}
-        {/* Darkened the grid lines: primary color 0x94a3b8 (Slate 400), secondary 0xd1d5db (Slate 300) */}
         <GridHelper args={[20, 20, 0x94a3b8, 0xd1d5db]} position={[0, -0.01, 0]} />
       </Canvas>
 
