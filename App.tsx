@@ -6,16 +6,18 @@ import MainViewer from './components/MainViewer';
 import { Box, Triangle, Grid3X3, Layers, Ruler, Compass } from 'lucide-react';
 
 const TOPICS: TopicInfo[] = [
+  { id: Topic.CoordinateSystem, title: '空間坐標系', description: '基礎三軸與點投影' },
+  { id: Topic.FoldingRectangle, title: '矩形摺疊問題', description: '矩形沿對角線摺疊至平面垂直' },
+  { id: Topic.FoldingSquare, title: '正方形摺疊問題', description: '正方形摺疊與二面角計算' },
+  { id: Topic.ThreePerpendiculars, title: '三垂線定理', description: '空間中的垂直關係判定' },
   { id: Topic.Tetrahedron, title: '正四面體', description: '觀察高、兩面角與歪斜線距離' },
+  { id: Topic.PlaneIntersections, title: '平面截距式', description: '空間平面與三軸相交點' },
   { id: Topic.Pyramid, title: '金字塔', description: '觀察高與底面對角線交點' },
   { id: Topic.DihedralAngle, title: '兩面角', description: '兩個平面相交形成的夾角' },
-  { id: Topic.ThreePerpendiculars, title: '三垂線定理', description: '空間中的垂直關係判定' },
-  { id: Topic.CoordinateSystem, title: '空間坐標系', description: '基礎三軸與點投影' },
-  { id: Topic.PlaneIntersections, title: '平面截距式', description: '空間平面與三軸相交點' },
 ];
 
 const App: React.FC = () => {
-  const [activeTopic, setActiveTopic] = useState<Topic>(Topic.Tetrahedron);
+  const [activeTopic, setActiveTopic] = useState<Topic>(Topic.CoordinateSystem);
 
   const currentTopicInfo = TOPICS.find(t => t.id === activeTopic)!;
 
