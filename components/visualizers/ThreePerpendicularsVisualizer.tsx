@@ -2,7 +2,6 @@ import React from 'react';
 import { Html, Line, Sphere } from '@react-three/drei';
 import * as THREE from 'three';
 
-// Fix: Define intrinsic elements as local constants to bypass JSX type checking issues
 const Group = 'group' as any;
 const Mesh = 'mesh' as any;
 const PlaneGeometry = 'planeGeometry' as any;
@@ -19,72 +18,61 @@ const ThreePerpendicularsVisualizer: React.FC = () => {
 
   return (
     <Group>
-      {/* Base Plane E */}
       <Mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.05, 0]}>
         <PlaneGeometry args={[12, 12]} />
-        <MeshStandardMaterial color="#cbd5e1" transparent opacity={0.3} />
+        <MeshStandardMaterial color="#cbd5e1" transparent opacity={0.2} />
       </Mesh>
-      <Html position={[-4, 0, -4]}>
-        <div className="text-slate-400 font-bold text-xl opacity-50 italic">平面 E (XY平面)</div>
-      </Html>
 
-      {/* Line L */}
       <Line points={[startL, endL]} color="#f59e0b" lineWidth={5} />
-      <Html position={endL}>
-        <div className="text-amber-600 font-bold bg-white/80 px-2 rounded-full shadow-sm">直線 L</div>
-      </Html>
-
-      {/* Perpendicular 1: PO */}
       <Line points={[P, O]} color="#ef4444" lineWidth={4} />
-      <Sphere position={P} args={[0.12]}><MeshStandardMaterial color="#ef4444" /></Sphere>
-      <Sphere position={O} args={[0.08]}><MeshStandardMaterial color="#1e293b" /></Sphere>
-      <Html position={P}>
-        <div className="bg-red-500 text-white px-2 py-0.5 rounded shadow-lg -translate-y-8 font-bold">P</div>
-      </Html>
-      <Html position={O}>
-        <div className="bg-slate-700 text-white px-1.5 py-0.5 rounded shadow-sm translate-y-6 text-[10px] font-bold">O</div>
-      </Html>
-
-      {/* Perpendicular 2: OA */}
       <Line points={[O, A]} color="#3b82f6" lineWidth={4} />
-      <Sphere position={A} args={[0.1]}><MeshStandardMaterial color="#3b82f6" /></Sphere>
-      <Html position={A}>
-        <div className="bg-blue-600 text-white px-2 py-0.5 rounded shadow-lg translate-x-6 font-bold">A</div>
-      </Html>
-
-      {/* Result Perpendicular 3: PA */}
       <Line points={[P, A]} color="#10b981" lineWidth={4} />
-      
-      {/* Labels for theorem steps */}
-      <Group position={[-5, 4, -2]}>
+
+      <Sphere position={P} args={[0.1]}><MeshStandardMaterial color="#ef4444" /></Sphere>
+      <Sphere position={O} args={[0.08]}><MeshStandardMaterial color="#475569" /></Sphere>
+      <Sphere position={A} args={[0.1]}><MeshStandardMaterial color="#3b82f6" /></Sphere>
+
+      <Html position={P} center><div className="text-[10px] font-black bg-red-500 text-white px-1.5 rounded -translate-y-6">P</div></Html>
+      <Html position={O} center><div className="text-[10px] font-black bg-slate-500 text-white px-1.5 rounded translate-y-6">O</div></Html>
+      <Html position={A} center><div className="text-[10px] font-black bg-blue-500 text-white px-1.5 rounded translate-x-6">A</div></Html>
+
+      {/* Redesigned Horizontal Info Panel */}
+      <Group position={[0, 4.5, 0]}>
         <Html center>
-          <div className="bg-white/90 backdrop-blur-md p-5 rounded-3xl border border-slate-200 text-slate-800 shadow-2xl w-64">
-            <h4 className="font-bold border-b border-slate-100 pb-2 mb-3 text-sm text-center uppercase tracking-widest text-slate-500">三垂線定理</h4>
-            <div className="space-y-3 font-medium">
-              <div className="flex items-center gap-3">
-                <div className="w-2 h-2 rounded-full bg-red-500"></div>
-                <p>1. <span className="text-red-600 font-bold">PO ⊥ 平面 E</span></p>
+          <div className="bg-white/90 backdrop-blur-2xl p-6 rounded-[2rem] border border-white/50 shadow-[0_30px_60px_rgba(0,0,0,0.12)] w-[700px] max-w-[95vw] select-none flex flex-col md:flex-row gap-6 items-stretch overflow-hidden">
+            
+            <div className="flex-1 flex flex-col justify-center border-b md:border-b-0 md:border-r border-slate-100 pb-4 md:pb-0 md:pr-6">
+              <div className="flex items-center gap-2 mb-1">
+                <div className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
+                <h4 className="font-black text-slate-800 text-lg tracking-tight">三垂線定理</h4>
               </div>
-              <div className="flex items-center gap-3">
-                <div className="w-2 h-2 rounded-full bg-blue-500"></div>
-                <p>2. <span className="text-blue-600 font-bold">OA ⊥ 直線 L</span></p>
+              <p className="text-[10px] text-slate-400 font-bold uppercase tracking-[0.15em]">Three Perpendiculars</p>
+            </div>
+
+            <div className="flex-[1.5] flex flex-col justify-center border-b md:border-b-0 md:border-r border-slate-100 pb-4 md:pb-0 md:px-4">
+              <p className="text-[9px] text-slate-400 font-black mb-3 uppercase tracking-widest">定理步驟 Step-by-Step</p>
+              <div className="space-y-2">
+                <div className="flex items-center gap-2 text-xs font-bold text-slate-600">
+                  <span className="w-4 h-4 rounded-full bg-red-100 text-red-600 flex items-center justify-center text-[8px]">1</span>
+                  <span>PO ⊥ 平面 E</span>
+                </div>
+                <div className="flex items-center gap-2 text-xs font-bold text-slate-600">
+                  <span className="w-4 h-4 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-[8px]">2</span>
+                  <span>OA ⊥ 直線 L</span>
+                </div>
               </div>
-              <div className="h-[1px] bg-slate-100 mx-2"></div>
-              <div className="flex items-center gap-3 bg-green-50 p-2 rounded-xl border border-green-100">
-                <div className="w-2 h-2 rounded-full bg-green-500"></div>
-                <p className="text-green-700 font-bold underline">則 PA ⊥ 直線 L</p>
+            </div>
+
+            <div className="flex-[1.5] flex flex-col justify-center md:pl-2">
+              <div className="bg-emerald-50 p-4 rounded-2xl border border-emerald-100 flex flex-col items-center justify-center">
+                <p className="text-[9px] text-emerald-500 font-black uppercase mb-1">結論 Conclusion</p>
+                <p className="text-emerald-700 font-black text-lg underline decoration-emerald-300 decoration-4 underline-offset-4">
+                  PA ⊥ 直線 L
+                </p>
               </div>
             </div>
           </div>
         </Html>
-      </Group>
-
-      {/* Right angle symbols */}
-      <Group position={[0, 0, 0]}>
-        <Line points={[[0.3, 0, 0], [0.3, 0.3, 0], [0, 0.3, 0]]} color="#ef4444" lineWidth={2} />
-      </Group>
-      <Group position={A} rotation={[0, Math.PI / 4, 0]}>
-         <Line points={[[-0.2, 0, 0], [-0.2, 0.2, 0]]} color="#10b981" lineWidth={2} />
       </Group>
     </Group>
   );

@@ -2,101 +2,99 @@ import React, { useMemo } from 'react';
 import { Html, Line, Sphere } from '@react-three/drei';
 import * as THREE from 'three';
 
-// Fix: Define intrinsic elements as local constants to bypass JSX type checking issues
 const Group = 'group' as any;
 const Mesh = 'mesh' as any;
 const BufferGeometry = 'bufferGeometry' as any;
 const BufferAttribute = 'bufferAttribute' as any;
-const MeshBasicMaterial = 'meshBasicMaterial' as any;
 const MeshStandardMaterial = 'meshStandardMaterial' as any;
+const MeshBasicMaterial = 'meshBasicMaterial' as any;
 
 const PlaneIntersectionsVisualizer: React.FC = () => {
-  const y_int = 3;   // Physical Red -> Label Y
-  const z_int = 4;   // Physical Green -> Label Z
-  const x_int = 2.5; // Physical Blue -> Label X
+  const y_int = 3;   
+  const z_int = 4;   
+  const x_int = 2.5; 
 
   const pA: [number, number, number] = [y_int, 0, 0];
   const pB: [number, number, number] = [0, z_int, 0];
   const pC: [number, number, number] = [0, 0, x_int];
 
   const positions = useMemo(() => {
-    return new Float32Array([
-      ...pA,
-      ...pB,
-      ...pC,
-    ]);
+    return new Float32Array([...pA, ...pB, ...pC]);
   }, [pA, pB, pC]);
 
   const Fraction = ({ numerator, denominator, color = "text-slate-800" }: { numerator: React.ReactNode, denominator: React.ReactNode, color?: string }) => (
     <div className={`inline-flex flex-col items-center align-middle mx-1 ${color}`}>
-      <span className="border-b-2 border-slate-400 px-3 leading-none pb-1">{numerator}</span>
-      <span className="leading-none pt-1.5">{denominator}</span>
+      <span className="border-b-2 border-slate-300 px-2 leading-none pb-1">{numerator}</span>
+      <span className="leading-none pt-1">{denominator}</span>
     </div>
   );
 
   return (
     <Group>
       {/* Axes */}
-      <Line points={[[-1, 0, 0], [6, 0, 0]]} color="#ef4444" lineWidth={3} />
-      <Line points={[[0, -1, 0], [0, 6, 0]]} color="#22c55e" lineWidth={3} />
-      <Line points={[[0, 0, -1], [0, 0, 6]]} color="#3b82f6" lineWidth={3} />
+      <Line points={[[-1, 0, 0], [6, 0, 0]]} color="#ef4444" lineWidth={2} opacity={0.3} transparent />
+      <Line points={[[0, -1, 0], [0, 6, 0]]} color="#22c55e" lineWidth={2} opacity={0.3} transparent />
+      <Line points={[[0, 0, -1], [0, 0, 6]]} color="#3b82f6" lineWidth={2} opacity={0.3} transparent />
 
-      {/* Intercept Points */}
-      <Sphere position={pA} args={[0.15]}>
-        <MeshBasicMaterial color="#dc2626" />
-      </Sphere>
-      <Html position={pA} center>
-        <div className="text-red-700 font-bold bg-white/90 px-3 py-1 rounded-full shadow-lg border border-red-200 translate-y-8 whitespace-nowrap font-mono">
-          y={y_int} (0, {y_int}, 0)
-        </div>
-      </Html>
-
-      <Sphere position={pB} args={[0.15]}>
-        <MeshBasicMaterial color="#16a34a" />
-      </Sphere>
-      <Html position={pB} center>
-        <div className="text-green-700 font-bold bg-white/90 px-3 py-1 rounded-full shadow-lg border border-green-200 -translate-x-20 whitespace-nowrap font-mono">
-          z={z_int} (0, 0, {z_int})
-        </div>
-      </Html>
-
-      <Sphere position={pC} args={[0.15]}>
-        <MeshBasicMaterial color="#2563eb" />
-      </Sphere>
-      <Html position={pC} center>
-        <div className="text-blue-700 font-bold bg-white/90 px-3 py-1 rounded-full shadow-lg border border-blue-200 translate-x-16 translate-z-4 whitespace-nowrap font-mono">
-          x={x_int} ({x_int}, 0, 0)
-        </div>
-      </Html>
+      {/* Intercept Points with simplified labels */}
+      <Sphere position={pA} args={[0.12]}><MeshBasicMaterial color="#ef4444" /></Sphere>
+      <Sphere position={pB} args={[0.12]}><MeshBasicMaterial color="#22c55e" /></Sphere>
+      <Sphere position={pC} args={[0.12]}><MeshBasicMaterial color="#3b82f6" /></Sphere>
 
       <Mesh>
         <BufferGeometry>
-          <BufferAttribute
-            attach="attributes-position"
-            array={positions}
-            count={3}
-            itemSize={3}
-          />
+          <BufferAttribute attach="attributes-position" array={positions} count={3} itemSize={3} />
         </BufferGeometry>
-        <MeshStandardMaterial color="#8b5cf6" transparent opacity={0.4} side={THREE.DoubleSide} />
+        <MeshStandardMaterial color="#8b5cf6" transparent opacity={0.3} side={THREE.DoubleSide} />
       </Mesh>
 
-      <Line points={[pA, pB]} color="#7c3aed" lineWidth={2} />
-      <Line points={[pB, pC]} color="#7c3aed" lineWidth={2} />
-      <Line points={[pC, pA]} color="#7c3aed" lineWidth={2} />
+      <Line points={[pA, pB, pC, pA]} color="#7c3aed" lineWidth={3} />
 
-      {/* Equation Label: Logical (X, Y, Z) order */}
-      <Group position={[4.5, 5, 4.5]}>
+      {/* Redesigned Horizontal Info Panel */}
+      <Group position={[0, 4, 0]}>
         <Html center>
-          <div className="bg-white/95 backdrop-blur-md p-8 rounded-[2rem] border border-slate-200 shadow-2xl min-w-[320px]">
-            <h4 className="text-xs font-black text-slate-400 mb-6 text-center uppercase tracking-[0.2em]">平面截距式</h4>
-            <div className="flex items-center justify-center text-3xl font-serif text-slate-800">
-              <Fraction numerator={<span className="text-blue-600 italic">x</span>} denominator={x_int} />
-              <span className="mx-3 text-slate-300 font-light">+</span>
-              <Fraction numerator={<span className="text-red-500 italic">y</span>} denominator={y_int} />
-              <span className="mx-3 text-slate-300 font-light">+</span>
-              <Fraction numerator={<span className="text-green-600 italic">z</span>} denominator={z_int} />
-              <span className="ml-4 text-slate-600">= 1</span>
+          <div className="bg-white/90 backdrop-blur-2xl p-6 rounded-[2rem] border border-white/50 shadow-[0_30px_60px_rgba(0,0,0,0.12)] w-[680px] max-w-[95vw] select-none flex flex-col md:flex-row gap-6 items-stretch overflow-hidden">
+            
+            {/* Section 1: Title */}
+            <div className="flex-1 flex flex-col justify-center border-b md:border-b-0 md:border-r border-slate-100 pb-4 md:pb-0 md:pr-6">
+              <div className="flex items-center gap-2 mb-1">
+                <div className="w-2.5 h-2.5 rounded-full bg-purple-500" />
+                <h4 className="font-black text-slate-800 text-lg tracking-tight">平面截距式</h4>
+              </div>
+              <p className="text-[10px] text-slate-400 font-bold uppercase tracking-[0.15em]">Intercept Form</p>
+            </div>
+
+            {/* Section 2: Data */}
+            <div className="flex-[1.2] flex flex-col justify-center border-b md:border-b-0 md:border-r border-slate-100 pb-4 md:pb-0 md:px-2">
+              <p className="text-[9px] text-slate-400 font-black mb-2 uppercase tracking-widest">軸截距參數</p>
+              <div className="flex gap-2">
+                <div className="flex-1 bg-red-50 p-2 rounded-xl border border-red-100 text-center">
+                  <span className="text-[9px] text-red-400 font-bold block">Y-Int</span>
+                  <span className="text-xs font-black text-red-700">{y_int}</span>
+                </div>
+                <div className="flex-1 bg-green-50 p-2 rounded-xl border border-green-100 text-center">
+                  <span className="text-[9px] text-green-400 font-bold block">Z-Int</span>
+                  <span className="text-xs font-black text-green-700">{z_int}</span>
+                </div>
+                <div className="flex-1 bg-blue-50 p-2 rounded-xl border border-blue-100 text-center">
+                  <span className="text-[9px] text-blue-400 font-bold block">X-Int</span>
+                  <span className="text-xs font-black text-blue-700">{x_int}</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Section 3: Equation */}
+            <div className="flex-[1.8] flex flex-col justify-center md:pl-2">
+              <div className="bg-slate-50 p-3 rounded-2xl border border-slate-100 flex items-center justify-center">
+                <div className="text-xl font-serif">
+                  <Fraction numerator={<span className="text-blue-600 italic">x</span>} denominator={x_int} />
+                  <span className="text-slate-300 mx-1">+</span>
+                  <Fraction numerator={<span className="text-red-500 italic">y</span>} denominator={y_int} />
+                  <span className="text-slate-300 mx-1">+</span>
+                  <Fraction numerator={<span className="text-green-600 italic">z</span>} denominator={z_int} />
+                  <span className="text-slate-600 ml-2 font-bold">= 1</span>
+                </div>
+              </div>
             </div>
           </div>
         </Html>
