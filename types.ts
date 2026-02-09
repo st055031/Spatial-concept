@@ -6,7 +6,9 @@ export enum Topic {
   CoordinateSystem = 'CoordinateSystem',
   PlaneIntersections = 'PlaneIntersections',
   FoldingRectangle = 'FoldingRectangle',
-  FoldingSquare = 'FoldingSquare'
+  FoldingSquare = 'FoldingSquare',
+  OctahedronInCube = 'OctahedronInCube',
+  StellaOctangula = 'StellaOctangula'
 }
 
 export interface TopicInfo {

@@ -10,13 +10,14 @@ const MeshStandardMaterial = 'meshStandardMaterial' as any;
 const MeshBasicMaterial = 'meshBasicMaterial' as any;
 
 const PlaneIntersectionsVisualizer: React.FC = () => {
-  const y_int = 3;   
-  const z_int = 4;   
-  const x_int = 2.5; 
+  const x_int = 3;   
+  const y_int = 4;   
+  const z_int = 2.5; 
 
-  const pA: [number, number, number] = [y_int, 0, 0];
-  const pB: [number, number, number] = [0, z_int, 0];
-  const pC: [number, number, number] = [0, 0, x_int];
+  // Points on axes: pA(x,0,0), pB(0,y,0), pC(0,0,z)
+  const pA: [number, number, number] = [x_int, 0, 0];
+  const pB: [number, number, number] = [0, y_int, 0];
+  const pC: [number, number, number] = [0, 0, z_int];
 
   const positions = useMemo(() => {
     return new Float32Array([...pA, ...pB, ...pC]);
@@ -24,8 +25,8 @@ const PlaneIntersectionsVisualizer: React.FC = () => {
 
   const Fraction = ({ numerator, denominator, color = "text-slate-800" }: { numerator: React.ReactNode, denominator: React.ReactNode, color?: string }) => (
     <div className={`inline-flex flex-col items-center align-middle mx-1 ${color}`}>
-      <span className="border-b-2 border-slate-300 px-2 leading-none pb-1">{numerator}</span>
-      <span className="leading-none pt-1">{denominator}</span>
+      <span className="border-b border-current px-2 leading-none pb-1 text-[0.9em]">{numerator}</span>
+      <span className="leading-none pt-1 text-[0.9em]">{denominator}</span>
     </div>
   );
 
@@ -36,12 +37,12 @@ const PlaneIntersectionsVisualizer: React.FC = () => {
       <Line points={[[0, -1, 0], [0, 6, 0]]} color="#22c55e" lineWidth={2} opacity={0.3} transparent />
       <Line points={[[0, 0, -1], [0, 0, 6]]} color="#3b82f6" lineWidth={2} opacity={0.3} transparent />
 
-      {/* Intercept Points with simplified labels */}
+      {/* Intercept Points */}
       <Sphere position={pA} args={[0.12]}><MeshBasicMaterial color="#ef4444" /></Sphere>
       <Sphere position={pB} args={[0.12]}><MeshBasicMaterial color="#22c55e" /></Sphere>
       <Sphere position={pC} args={[0.12]}><MeshBasicMaterial color="#3b82f6" /></Sphere>
 
-      <Mesh>
+      <Mesh shadow>
         <BufferGeometry>
           <BufferAttribute attach="attributes-position" array={positions} count={3} itemSize={3} />
         </BufferGeometry>
@@ -53,7 +54,7 @@ const PlaneIntersectionsVisualizer: React.FC = () => {
       {/* Redesigned Horizontal Info Panel */}
       <Group position={[0, 4, 0]}>
         <Html center>
-          <div className="bg-white/90 backdrop-blur-2xl p-6 rounded-[2rem] border border-white/50 shadow-[0_30px_60px_rgba(0,0,0,0.12)] w-[680px] max-w-[95vw] select-none flex flex-col md:flex-row gap-6 items-stretch overflow-hidden">
+          <div className="bg-white/90 backdrop-blur-2xl p-6 rounded-[2rem] border border-white/50 shadow-[0_30px_60px_rgba(0,0,0,0.12)] w-[720px] max-w-[95vw] select-none flex flex-col md:flex-row gap-6 items-stretch overflow-hidden">
             
             {/* Section 1: Title */}
             <div className="flex-1 flex flex-col justify-center border-b md:border-b-0 md:border-r border-slate-100 pb-4 md:pb-0 md:pr-6">
@@ -69,16 +70,16 @@ const PlaneIntersectionsVisualizer: React.FC = () => {
               <p className="text-[9px] text-slate-400 font-black mb-2 uppercase tracking-widest">軸截距參數</p>
               <div className="flex gap-2">
                 <div className="flex-1 bg-red-50 p-2 rounded-xl border border-red-100 text-center">
-                  <span className="text-[9px] text-red-400 font-bold block">Y-Int</span>
-                  <span className="text-xs font-black text-red-700">{y_int}</span>
+                  <span className="text-[9px] text-red-400 font-bold block">X-Int</span>
+                  <span className="text-xs font-black text-red-700">{x_int}</span>
                 </div>
                 <div className="flex-1 bg-green-50 p-2 rounded-xl border border-green-100 text-center">
-                  <span className="text-[9px] text-green-400 font-bold block">Z-Int</span>
-                  <span className="text-xs font-black text-green-700">{z_int}</span>
+                  <span className="text-[9px] text-green-400 font-bold block">Y-Int</span>
+                  <span className="text-xs font-black text-green-700">{y_int}</span>
                 </div>
                 <div className="flex-1 bg-blue-50 p-2 rounded-xl border border-blue-100 text-center">
-                  <span className="text-[9px] text-blue-400 font-bold block">X-Int</span>
-                  <span className="text-xs font-black text-blue-700">{x_int}</span>
+                  <span className="text-[9px] text-blue-400 font-bold block">Z-Int</span>
+                  <span className="text-xs font-black text-blue-700">{z_int}</span>
                 </div>
               </div>
             </div>
@@ -87,11 +88,11 @@ const PlaneIntersectionsVisualizer: React.FC = () => {
             <div className="flex-[1.8] flex flex-col justify-center md:pl-2">
               <div className="bg-slate-50 p-3 rounded-2xl border border-slate-100 flex items-center justify-center">
                 <div className="text-xl font-serif">
-                  <Fraction numerator={<span className="text-blue-600 italic">x</span>} denominator={x_int} />
+                  <Fraction numerator={<span className="text-red-500 italic">x</span>} denominator={x_int} color="text-red-600" />
                   <span className="text-slate-300 mx-1">+</span>
-                  <Fraction numerator={<span className="text-red-500 italic">y</span>} denominator={y_int} />
+                  <Fraction numerator={<span className="text-green-600 italic">y</span>} denominator={y_int} color="text-green-600" />
                   <span className="text-slate-300 mx-1">+</span>
-                  <Fraction numerator={<span className="text-green-600 italic">z</span>} denominator={z_int} />
+                  <Fraction numerator={<span className="text-blue-500 italic">z</span>} denominator={z_int} color="text-blue-600" />
                   <span className="text-slate-600 ml-2 font-bold">= 1</span>
                 </div>
               </div>

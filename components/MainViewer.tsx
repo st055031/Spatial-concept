@@ -10,6 +10,8 @@ import CoordinateSystemVisualizer from './visualizers/CoordinateSystemVisualizer
 import PlaneIntersectionsVisualizer from './visualizers/PlaneIntersectionsVisualizer';
 import FoldingRectangleVisualizer from './visualizers/FoldingRectangleVisualizer';
 import FoldingSquareVisualizer from './visualizers/FoldingSquareVisualizer';
+import OctahedronInCubeVisualizer from './visualizers/OctahedronInCubeVisualizer';
+import StellaOctangulaVisualizer from './visualizers/StellaOctangulaVisualizer';
 
 // Fix: Define intrinsic elements as local constants to bypass JSX type checking issues
 const AmbientLight = 'ambientLight' as any;
@@ -31,6 +33,8 @@ const Scene: React.FC<{ topic: Topic }> = ({ topic }) => {
     case Topic.PlaneIntersections: return <PlaneIntersectionsVisualizer />;
     case Topic.FoldingRectangle: return <FoldingRectangleVisualizer />;
     case Topic.FoldingSquare: return <FoldingSquareVisualizer />;
+    case Topic.OctahedronInCube: return <OctahedronInCubeVisualizer />;
+    case Topic.StellaOctangula: return <StellaOctangulaVisualizer />;
     default: return null;
   }
 };
@@ -54,7 +58,7 @@ const MainViewer: React.FC<MainViewerProps> = ({ topic }) => {
           <GizmoViewport 
             axisColors={['#ef4444', '#22c55e', '#3b82f6']} 
             labelColor="#1e293b" 
-            labels={['Y', 'Z', 'X']}
+            labels={['X', 'Y', 'Z']}
           />
         </GizmoHelper>
 
