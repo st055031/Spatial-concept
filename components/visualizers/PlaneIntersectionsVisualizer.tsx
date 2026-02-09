@@ -10,14 +10,18 @@ const MeshStandardMaterial = 'meshStandardMaterial' as any;
 const MeshBasicMaterial = 'meshBasicMaterial' as any;
 
 const PlaneIntersectionsVisualizer: React.FC = () => {
-  const x_int = 3;   
-  const y_int = 4;   
-  const z_int = 2.5; 
+  // 使用者定義映射：藍=X, 紅=Y, 綠=Z
+  const userX_int = 3;   
+  const userY_int = 4;   
+  const userZ_int = 2.5; 
 
-  // Points on axes: pA(x,0,0), pB(0,y,0), pC(0,0,z)
-  const pA: [number, number, number] = [x_int, 0, 0];
-  const pB: [number, number, number] = [0, y_int, 0];
-  const pC: [number, number, number] = [0, 0, z_int];
+  // Points on axes based on mapping: 
+  // UserX -> Blue (Three Z)
+  // UserY -> Red (Three X)
+  // UserZ -> Green (Three Y)
+  const pA: [number, number, number] = [userY_int, 0, 0]; // Red axis (User Y)
+  const pB: [number, number, number] = [0, userZ_int, 0]; // Green axis (User Z)
+  const pC: [number, number, number] = [0, 0, userX_int]; // Blue axis (User X)
 
   const positions = useMemo(() => {
     return new Float32Array([...pA, ...pB, ...pC]);
@@ -37,10 +41,33 @@ const PlaneIntersectionsVisualizer: React.FC = () => {
       <Line points={[[0, -1, 0], [0, 6, 0]]} color="#22c55e" lineWidth={2} opacity={0.3} transparent />
       <Line points={[[0, 0, -1], [0, 0, 6]]} color="#3b82f6" lineWidth={2} opacity={0.3} transparent />
 
-      {/* Intercept Points */}
-      <Sphere position={pA} args={[0.12]}><MeshBasicMaterial color="#ef4444" /></Sphere>
-      <Sphere position={pB} args={[0.12]}><MeshBasicMaterial color="#22c55e" /></Sphere>
-      <Sphere position={pC} args={[0.12]}><MeshBasicMaterial color="#3b82f6" /></Sphere>
+      {/* Intercept Points with Labels */}
+      <Group>
+        <Sphere position={pA} args={[0.12]}><MeshBasicMaterial color="#ef4444" /></Sphere>
+        <Html position={pA} distanceFactor={10} center>
+          <div className="bg-red-500/90 text-white px-2.5 py-1 rounded shadow-lg text-[10px] font-black border border-white/20 -translate-y-8 whitespace-nowrap">
+            (0, {userY_int}, 0)
+          </div>
+        </Html>
+      </Group>
+
+      <Group>
+        <Sphere position={pB} args={[0.12]}><MeshBasicMaterial color="#22c55e" /></Sphere>
+        <Html position={pB} distanceFactor={10} center>
+          <div className="bg-green-600/90 text-white px-2.5 py-1 rounded shadow-lg text-[10px] font-black border border-white/20 translate-x-12 whitespace-nowrap">
+            (0, 0, {userZ_int})
+          </div>
+        </Html>
+      </Group>
+
+      <Group>
+        <Sphere position={pC} args={[0.12]}><MeshBasicMaterial color="#3b82f6" /></Sphere>
+        <Html position={pC} distanceFactor={10} center>
+          <div className="bg-blue-600/90 text-white px-2.5 py-1 rounded shadow-lg text-[10px] font-black border border-white/20 translate-y-8 whitespace-nowrap">
+            ({userX_int}, 0, 0)
+          </div>
+        </Html>
+      </Group>
 
       <Mesh shadow>
         <BufferGeometry>
@@ -52,7 +79,7 @@ const PlaneIntersectionsVisualizer: React.FC = () => {
       <Line points={[pA, pB, pC, pA]} color="#7c3aed" lineWidth={3} />
 
       {/* Redesigned Horizontal Info Panel */}
-      <Group position={[0, 4, 0]}>
+      <Group position={[0, 4.5, 0]}>
         <Html center>
           <div className="bg-white/90 backdrop-blur-2xl p-6 rounded-[2rem] border border-white/50 shadow-[0_30px_60px_rgba(0,0,0,0.12)] w-[720px] max-w-[95vw] select-none flex flex-col md:flex-row gap-6 items-stretch overflow-hidden">
             
@@ -67,19 +94,19 @@ const PlaneIntersectionsVisualizer: React.FC = () => {
 
             {/* Section 2: Data */}
             <div className="flex-[1.2] flex flex-col justify-center border-b md:border-b-0 md:border-r border-slate-100 pb-4 md:pb-0 md:px-2">
-              <p className="text-[9px] text-slate-400 font-black mb-2 uppercase tracking-widest">軸截距參數</p>
+              <p className="text-[9px] text-slate-400 font-black mb-2 uppercase tracking-widest">軸截距參數 (藍X, 紅Y, 綠Z)</p>
               <div className="flex gap-2">
+                <div className="flex-1 bg-blue-50 p-2 rounded-xl border border-blue-100 text-center">
+                  <span className="text-[9px] text-blue-400 font-bold block">X-Int</span>
+                  <span className="text-xs font-black text-blue-700">{userX_int}</span>
+                </div>
                 <div className="flex-1 bg-red-50 p-2 rounded-xl border border-red-100 text-center">
-                  <span className="text-[9px] text-red-400 font-bold block">X-Int</span>
-                  <span className="text-xs font-black text-red-700">{x_int}</span>
+                  <span className="text-[9px] text-red-400 font-bold block">Y-Int</span>
+                  <span className="text-xs font-black text-red-700">{userY_int}</span>
                 </div>
                 <div className="flex-1 bg-green-50 p-2 rounded-xl border border-green-100 text-center">
-                  <span className="text-[9px] text-green-400 font-bold block">Y-Int</span>
-                  <span className="text-xs font-black text-green-700">{y_int}</span>
-                </div>
-                <div className="flex-1 bg-blue-50 p-2 rounded-xl border border-blue-100 text-center">
-                  <span className="text-[9px] text-blue-400 font-bold block">Z-Int</span>
-                  <span className="text-xs font-black text-blue-700">{z_int}</span>
+                  <span className="text-[9px] text-green-400 font-bold block">Z-Int</span>
+                  <span className="text-xs font-black text-green-700">{userZ_int}</span>
                 </div>
               </div>
             </div>
@@ -87,12 +114,12 @@ const PlaneIntersectionsVisualizer: React.FC = () => {
             {/* Section 3: Equation */}
             <div className="flex-[1.8] flex flex-col justify-center md:pl-2">
               <div className="bg-slate-50 p-3 rounded-2xl border border-slate-100 flex items-center justify-center">
-                <div className="text-xl font-serif">
-                  <Fraction numerator={<span className="text-red-500 italic">x</span>} denominator={x_int} color="text-red-600" />
+                <div className="text-xl font-serif whitespace-nowrap">
+                  <Fraction numerator={<span className="text-blue-500 italic">x</span>} denominator={userX_int} color="text-blue-600" />
                   <span className="text-slate-300 mx-1">+</span>
-                  <Fraction numerator={<span className="text-green-600 italic">y</span>} denominator={y_int} color="text-green-600" />
+                  <Fraction numerator={<span className="text-red-500 italic">y</span>} denominator={userY_int} color="text-red-600" />
                   <span className="text-slate-300 mx-1">+</span>
-                  <Fraction numerator={<span className="text-blue-500 italic">z</span>} denominator={z_int} color="text-blue-600" />
+                  <Fraction numerator={<span className="text-green-600 italic">z</span>} denominator={userZ_int} color="text-green-600" />
                   <span className="text-slate-600 ml-2 font-bold">= 1</span>
                 </div>
               </div>

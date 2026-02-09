@@ -53,10 +53,14 @@ const StellaOctangulaVisualizer: React.FC = () => {
   }, [v]);
 
   // Intersection Octahedron (Face Centers)
+  // Mapping: Blue=X, Red=Y, Green=Z
   const ov = useMemo(() => ({
-    top: new THREE.Vector3(0, s, 0), bottom: new THREE.Vector3(0, -s, 0),
-    front: new THREE.Vector3(0, 0, s), back: new THREE.Vector3(0, 0, -s),
-    right: new THREE.Vector3(s, 0, 0), left: new THREE.Vector3(-s, 0, 0),
+    top: new THREE.Vector3(0, s, 0), // User Z (Green)
+    bottom: new THREE.Vector3(0, -s, 0),
+    front: new THREE.Vector3(0, 0, s), // User X (Blue)
+    back: new THREE.Vector3(0, 0, -s),
+    right: new THREE.Vector3(s, 0, 0), // User Y (Red)
+    left: new THREE.Vector3(-s, 0, 0),
   }), [s]);
 
   const octaGeo = useMemo(() => {
@@ -112,7 +116,7 @@ const StellaOctangulaVisualizer: React.FC = () => {
         ))}
       </Group>
 
-      {/* --- NEW: Octahedron Diagonals for Intersection --- */}
+      {/* 對角線：藍=X, 紅=Y, 綠=Z */}
       <Group>
         <Line points={[ov.top, ov.bottom]} color="#22c55e" lineWidth={2} dashed dashScale={10} opacity={0.7} transparent />
         <Line points={[ov.left, ov.right]} color="#ef4444" lineWidth={1.5} dashed dashScale={10} opacity={0.7} transparent />
@@ -140,18 +144,18 @@ const StellaOctangulaVisualizer: React.FC = () => {
             </div>
 
             <div className="flex-[2.8] flex flex-col justify-center md:pl-2">
-              <p className="text-[9px] text-slate-400 font-black mb-3 uppercase tracking-widest text-center">內部對角線說明</p>
+              <p className="text-[9px] text-slate-400 font-black mb-3 uppercase tracking-widest text-center">內部對角線 (藍X, 紅Y, 綠Z)</p>
               <div className="bg-slate-900 p-4 rounded-3xl shadow-2xl flex justify-around">
                 <div className="text-center">
-                  <span className="block text-[9px] text-green-400 font-black uppercase">高度</span>
+                  <span className="block text-[9px] text-blue-400 font-black uppercase">X軸</span>
                   <span className="text-white font-mono text-xs">L</span>
                 </div>
                 <div className="text-center">
-                  <span className="block text-[9px] text-red-400 font-black uppercase">X軸對角線</span>
+                  <span className="block text-[9px] text-red-400 font-black uppercase">Y軸</span>
                   <span className="text-white font-mono text-xs">L</span>
                 </div>
                 <div className="text-center">
-                  <span className="block text-[9px] text-blue-400 font-black uppercase">Z軸對角線</span>
+                  <span className="block text-[9px] text-green-400 font-black uppercase">Z軸</span>
                   <span className="text-white font-mono text-xs">L</span>
                 </div>
               </div>

@@ -58,7 +58,7 @@ const MainViewer: React.FC<MainViewerProps> = ({ topic }) => {
           <GizmoViewport 
             axisColors={['#ef4444', '#22c55e', '#3b82f6']} 
             labelColor="#1e293b" 
-            labels={['X', 'Y', 'Z']}
+            labels={['Y', 'Z', 'X']}
           />
         </GizmoHelper>
 

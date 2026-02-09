@@ -26,20 +26,24 @@ const OctahedronInCubeVisualizer: React.FC = () => {
   }), [s]);
 
   // Octahedron Vertices (Face Centers)
+  // 映射關係：藍=X (Z-axis), 紅=Y (X-axis), 綠=Z (Y-axis)
   const ov = useMemo(() => ({
-    top: new THREE.Vector3(0, s, 0), bottom: new THREE.Vector3(0, -s, 0),
-    front: new THREE.Vector3(0, 0, s), back: new THREE.Vector3(0, 0, -s),
-    right: new THREE.Vector3(s, 0, 0), left: new THREE.Vector3(-s, 0, 0),
+    top: new THREE.Vector3(0, s, 0), // Y-axis in Three -> User Z (Green)
+    bottom: new THREE.Vector3(0, -s, 0),
+    front: new THREE.Vector3(0, 0, s), // Z-axis in Three -> User X (Blue)
+    back: new THREE.Vector3(0, 0, -s),
+    right: new THREE.Vector3(s, 0, 0), // X-axis in Three -> User Y (Red)
+    left: new THREE.Vector3(-s, 0, 0),
   }), [s]);
 
   // Face Diagonals of the Cube
   const faceDiagonals = useMemo(() => [
-    [cv.A, cv.C], [cv.B, cv.D], // Front
-    [cv.E, cv.G], [cv.f, cv.H], // Back
-    [cv.A, cv.H], [cv.D, cv.E], // Left
-    [cv.B, cv.G], [cv.C, cv.f], // Right
-    [cv.D, cv.G], [cv.C, cv.H], // Top
-    [cv.A, cv.f], [cv.B, cv.E], // Bottom
+    [cv.A, cv.C], [cv.B, cv.D], 
+    [cv.E, cv.G], [cv.f, cv.H], 
+    [cv.A, cv.H], [cv.D, cv.E], 
+    [cv.B, cv.G], [cv.C, cv.f], 
+    [cv.D, cv.G], [cv.C, cv.H], 
+    [cv.A, cv.f], [cv.B, cv.E], 
   ], [cv]);
 
   // Octahedron Geometry with Normals
@@ -102,15 +106,15 @@ const OctahedronInCubeVisualizer: React.FC = () => {
         ))}
       </Group>
 
-      {/* --- NEW: Octahedron Height and Mid-plane Diagonals --- */}
+      {/* 內部對角線：依使用者映射顯色 */}
       <Group>
-        {/* Vertical Height (Y-axis equivalent) */}
+        {/* User Z (Green) - Three Y-axis */}
         <Line points={[ov.top, ov.bottom]} color="#22c55e" lineWidth={4} dashed dashScale={12} />
         
-        {/* Mid-plane Diagonal 1 (X-axis equivalent) */}
+        {/* User Y (Red) - Three X-axis */}
         <Line points={[ov.left, ov.right]} color="#ef4444" lineWidth={3} dashed dashScale={12} />
         
-        {/* Mid-plane Diagonal 2 (Z-axis equivalent) */}
+        {/* User X (Blue) - Three Z-axis */}
         <Line points={[ov.front, ov.back]} color="#3b82f6" lineWidth={3} dashed dashScale={12} />
       </Group>
 
@@ -136,15 +140,19 @@ const OctahedronInCubeVisualizer: React.FC = () => {
             </div>
 
             <div className="flex-[1.8] flex flex-col justify-center border-b md:border-b-0 md:border-r border-slate-100 pb-4 md:pb-0 md:px-4">
-              <p className="text-[9px] text-slate-400 font-black mb-3 uppercase tracking-widest">特徵說明</p>
+              <p className="text-[9px] text-slate-400 font-black mb-3 uppercase tracking-widest">特徵說明 (藍X, 紅Y, 綠Z)</p>
               <div className="space-y-2 text-[11px] font-bold text-slate-600">
                 <div className="flex items-center gap-2">
-                  <div className="w-3 h-1 bg-green-500 rounded-full" />
-                  <span>綠色虛線：正八面體的高</span>
+                  <div className="w-3 h-1 bg-blue-500 rounded-full" />
+                  <span>藍色虛線：正八面體的 X 軸</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <div className="w-3 h-1 bg-blue-500 rounded-full" />
-                  <span>藍/紅虛線：中間正方形的對角線</span>
+                  <div className="w-3 h-1 bg-red-500 rounded-full" />
+                  <span>紅色虛線：正八面體的 Y 軸</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-1 bg-green-500 rounded-full" />
+                  <span>綠色虛線：正八面體的 Z 軸 (高)</span>
                 </div>
               </div>
             </div>
@@ -153,7 +161,7 @@ const OctahedronInCubeVisualizer: React.FC = () => {
               <div className="bg-slate-900 p-5 rounded-3xl shadow-2xl text-center">
                 <p className="font-black text-amber-400 text-xs tracking-widest uppercase mb-2">座標關係</p>
                 <p className="text-white text-[11px] leading-relaxed">
-                  正八面體的三條對角線相互垂直且等長，其長度等於立方體的邊長 L。
+                  三條對角線等長 (L)，且分別平行於 X, Y, Z 軸。
                 </p>
               </div>
             </div>
