@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react';
 import { Html, Line, Sphere } from '@react-three/drei';
-import * as THREE from 'three';
 
 const Group = 'group' as any;
 const Mesh = 'mesh' as any;
